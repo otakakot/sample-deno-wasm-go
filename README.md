@@ -1,0 +1,1 @@
+# sample-deno-wasm-go
