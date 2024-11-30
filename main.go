@@ -10,19 +10,19 @@ import (
 var done = make(chan struct{})
 
 func init() {
-	js.Global().Set("handle", js.FuncOf(handle))
+	js.Global().Set("hello", js.FuncOf(hello))
 }
 
-func handle(this js.Value, args []js.Value) any {
+func hello(this js.Value, args []js.Value) any {
 	defer func() {
-		slog.Info("handle done")
+		slog.Info("hello done")
 		done <- struct{}{}
 	}()
 
-	println("Hello, Go Wasm World! from handle")
-
 	fmt.Printf("this: %v\n", this)
 	fmt.Printf("args: %v\n", args)
+
+	println("Hello, World from Wasm Go!")
 
 	return nil
 }
