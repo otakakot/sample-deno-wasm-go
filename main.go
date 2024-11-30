@@ -7,7 +7,7 @@ import (
 	"syscall/js"
 )
 
-var close = make(chan struct{})
+var done = make(chan struct{})
 
 func init() {
 	js.Global().Set("handle", js.FuncOf(handle))
@@ -16,7 +16,7 @@ func init() {
 func handle(this js.Value, args []js.Value) any {
 	defer func() {
 		slog.Info("handle done")
-		close <- struct{}{}
+		done <- struct{}{}
 	}()
 
 	println("Hello, Go Wasm World! from handle")
@@ -28,5 +28,5 @@ func handle(this js.Value, args []js.Value) any {
 }
 
 func main() {
-	<-close
+	<-done
 }
