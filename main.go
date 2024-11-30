@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"log/slog"
 	"syscall/js"
 )
 
@@ -15,14 +14,17 @@ func init() {
 
 func hello(this js.Value, args []js.Value) any {
 	defer func() {
-		slog.Info("hello done")
+		fmt.Printf("hello done\n")
 		done <- struct{}{}
 	}()
 
 	fmt.Printf("this: %v\n", this)
+
 	fmt.Printf("args: %v\n", args)
 
-	println("Hello, World from Wasm Go!")
+	fmt.Printf("Hello World from Wasm Go!\n")
+
+	js.Global().Get("console").Call("info", "Hello World! from console.log")
 
 	return nil
 }
