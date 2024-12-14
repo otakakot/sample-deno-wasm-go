@@ -1,30 +1,22 @@
-//go:generate sh -c "GOOS=js GOARCH=wasm go build -o main.wasm main.go && cat main.wasm | deno run https://denopkg.com/syumai/binpack/mod.ts > mainwasm.ts"
+//go:generate sh -c "GOOS=js GOARCH=wasm go build -o main.wasm main.go"
 package main
 
 import (
-	"fmt"
 	"syscall/js"
 )
 
 var done = make(chan struct{})
 
 func init() {
-	js.Global().Set("hello", js.FuncOf(hello))
+	js.Global().Set("golog", js.FuncOf(golog))
 }
 
-func hello(this js.Value, args []js.Value) any {
+func golog(this js.Value, args []js.Value) any {
 	defer func() {
-		fmt.Printf("hello done\n")
 		done <- struct{}{}
 	}()
 
-	fmt.Printf("this: %v\n", this)
-
-	fmt.Printf("args: %v\n", args)
-
-	fmt.Printf("Hello World from Wasm Go!\n")
-
-	js.Global().Get("console").Call("info", "Hello World! from console.log")
+	println(args[0].String())
 
 	return nil
 }
